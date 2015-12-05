@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="Dark_Slate_Grey">#25383C</color>
+    <color name="MidnightBlue">#191970</color>
+    <color name="DarkSlateBlue">#483D8B</color>
+    <color name="navy">#000080</color>
+    <color name="DarkTurquoise">#00CED1</color>
+    <color name="DeepSkyBlue">#00BFFF</color>
+    <color name="Aqua">#00FFFF</color>
+    <color name="MediumTurquoise">#48D1CC</color>
+    <color name="white">#FFFFFF</color>
+    <color name="LightGrey">#D3D3D3</color>
+    <color name="red">#FF0000</color>
+    <color name="IndianRed">#CD5C5C</color>
+    <color name="DarkRed">#8B0000</color>
+    <color name="DimGray">#696969</color>
+    <color name="SaddleBrown">#8B4513</color>
+    <color name="FireBrick">#B22222</color>
+    <color name="DarkGoldenrod">#B8860B</color>
+
+
+</resources>

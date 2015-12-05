@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/eymard/AndroidStudioProjects/T3x/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-maps/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="06a42becc33232ec0ee125161da68c1829c9f8fd">
+        <dex dex="/Users/eymard/AndroidStudioProjects/T3x/app/build/intermediates/pre-dexed/debug/classes-c40dc0be41a389b0e27fc765ed44ca402b29d670.jar" />
+    </item>
+    <item
+        jar="/Users/eymard/AndroidStudioProjects/T3x/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="a78183f30e769a98ab4820794f597763088d3065">
+        <dex dex="/Users/eymard/AndroidStudioProjects/T3x/app/build/intermediates/pre-dexed/debug/classes-20aaa0dcdda01b4d3cdcfcef9c825b7729343875.jar" />
+    </item>
+
+</items>
