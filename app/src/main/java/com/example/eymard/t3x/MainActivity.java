@@ -1,6 +1,8 @@
 package com.example.eymard.t3x;
 
 import android.location.Location;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,13 +25,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     final int RQS_GooglePlayServices = 1;
     GoogleMap myMap;
+    //LocationService appLocationService;
 
     TextView tvLocInfo;
+    String title=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //appLocationService= new LocationService(this);
 
         tvLocInfo = (TextView)findViewById(R.id.locinfo);
 
@@ -67,8 +72,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onMapLongClick(LatLng point) {
-        tvLocInfo.setText("New marker added@" + point.toString());
-        myMap.addMarker(new MarkerOptions().position(point).title(point.toString()));
+        //tvLocInfo.setText("New marker added@" + point.toString());
+        // on recupere l'adresse de localisation
+        LocationAddress locationAddress = new LocationAddress();
+        locationAddress.getAddressFromLocation(point.latitude , point.longitude ,
+                getApplicationContext(), new GeocoderHandler());
+        myMap.addMarker(new MarkerOptions().position(point).title(title));
     }
 
 
@@ -97,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     /*
-    Toutes les opgions de ma map
+    Toutes les options de ma map
     */
     public void setUpMap(GoogleMap map)
     {
@@ -106,7 +115,26 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+    //cette classe geohandler permet de recuperer le message envoyer par le thread LocationAddress
+    private class GeocoderHandler extends Handler {
 
-
-
+        //on surchage la methode pour l'adapter à notre besoin
+        //ici elle nous sert à recupérer le message du thread qui traite geocoder
+        @Override
+        public void handleMessage(Message message) {
+            String locationAddress;
+            switch (message.what) {
+                case 1:
+                    Bundle bundle = message.getData();
+                    locationAddress= bundle.getString("adresse");
+                    break;
+                default:
+                    locationAddress= null;
+            }
+            title=locationAddress;
+            tvLocInfo.setText(locationAddress);
+        }
+    }
 }
+
+
