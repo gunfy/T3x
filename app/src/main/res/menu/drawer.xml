@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/navigation_item_profil"
+            android:checked="true"
+            android:icon="@drawable/ic_profile"
+            android:title="@string/nav_item_profil" />
+        <item
+            android:id="@+id/navigation_item_historic"
+            android:icon="@drawable/ic_historic"
+            android:title="@string/nav_item_historic" />
+
+    </group>
+
+    <item android:title="@string/nav_sub_menu">
+        <menu>
+            <item
+                android:icon="@drawable/ic_emoticon"
+                android:title="@string/nav_sub_menu_about" />
+        </menu>
+
+    </item>
+</menu>

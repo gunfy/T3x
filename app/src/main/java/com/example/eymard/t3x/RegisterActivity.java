@@ -1,5 +1,6 @@
 package com.example.eymard.t3x;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,7 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class RegisterActivity extends AppCompatActivity{
+public class RegisterActivity extends AppCompatActivity implements View.OnClickListener{
 
     private Button bt_register;
     private EditText et_firstname, et_lastname, et_username, et_email, et_password;
@@ -28,12 +29,23 @@ public class RegisterActivity extends AppCompatActivity{
         et_password=(EditText) findViewById(R.id.et_password);
         bt_register=(Button) findViewById(R.id.bt_register);
 
-        bt_register.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //attemptLogin();
-            }
-        });
+        bt_register.setOnClickListener(this);
+
     }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.bt_register:
+
+                //attemptLogin();
+                startActivity(new Intent(this, MainActivity.class));
+
+                break;
+
+        }
+    }
+
+
 
 }

@@ -33,10 +33,10 @@ public class LocationAddress {
                     if (addressList != null && addressList .size() > 0) {
                         Address address = addressList.get(0);
                         StringBuilder sb = new StringBuilder();
-                        for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
-                            sb.append(address.getAddressLine(i)).append("\n");
-                        }
-                        sb.append(address.getLocality());
+                        //for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
+                            sb.append(address.getAddressLine(0)).append("\n");
+                        //}
+                       // sb.append(address.getLocality());
                         result = sb.toString();
                     }
                 }  catch (IOException e) {
@@ -48,7 +48,7 @@ public class LocationAddress {
                     if (result != null) {
                         message .what = 1;
                         Bundle bundle = new Bundle();
-                        result = "Adresse:\n" + result;
+                        //result = "Adresse:\n" + result;
                         bundle.putString("adresse", result);
                         message.setData(bundle);
                     } else {
