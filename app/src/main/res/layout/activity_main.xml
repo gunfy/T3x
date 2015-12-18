@@ -24,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
-            android:textSize="20dp"
+            android:textSize="16dp"
             android:layout_below="@+id/toolbar"
             android:background="@drawable/bt_locinfo"
             android:gravity="center"/>

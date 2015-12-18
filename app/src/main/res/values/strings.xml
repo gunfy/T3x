@@ -9,6 +9,7 @@
     <string name="prompt_username">Username</string>
     <string name="action_sign_in">SIGN IN</string>
     <string name="action_login">LOGIN</string>
+    <string name="action_cancel">Cancel</string>
     <string name="tv_register">Register here</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
@@ -21,10 +22,6 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_menu">Menu</string>
 
-
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
 
     <string name="drawer_header_text">Drawer Header</string>
     <string name="nav_item_profil">My Profile</string>

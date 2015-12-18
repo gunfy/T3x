@@ -18,7 +18,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private Button bt_login;
     private EditText et_email, et_password;
-    private TextView tv_registerLink;
+    private TextView bt_registerLink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,11 +27,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         et_email=(EditText) findViewById(R.id.et_email);
         et_password=(EditText) findViewById(R.id.et_password);
-        tv_registerLink=(TextView) findViewById(R.id.tv_register);
+        bt_registerLink=(Button) findViewById(R.id.bt_go_register);
         bt_login=(Button) findViewById(R.id.bt_login);
 
         bt_login.setOnClickListener(this);
-        tv_registerLink.setOnClickListener(this);
+        bt_registerLink.setOnClickListener(this);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 break;
 
-            case R.id.tv_register:
+            case R.id.bt_go_register:
                 //appel de l'activité de register...
                 startActivity(new Intent(this, RegisterActivity.class));
 

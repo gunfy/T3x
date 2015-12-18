@@ -66,8 +66,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
         //gestion navigation menu
-
-
+        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                menuItem.setChecked(true);
+                mDrawerLayout.closeDrawers();
+                Toast.makeText(MainActivity.this, menuItem.getTitle(), Toast.LENGTH_LONG).show();
+                return true;
+            }
+        });
 
 
         //on récupère le fragment définit dans le layout qui va contenir la carte

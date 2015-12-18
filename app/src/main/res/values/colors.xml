@@ -19,6 +19,9 @@
     <color name="DarkGoldenrod">#B8860B</color>
     <color name="primary">#3F51B5</color>
     <color name="primary_dark">#303F9F</color>
+    <color name="YellowGreen">#9ACD32</color>
+    <color name="LawnGreen">#7CFC00</color>
+    <color name="green">#008000</color>
 
 
 </resources>

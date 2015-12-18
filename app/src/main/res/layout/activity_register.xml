@@ -23,11 +23,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/info_register_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
             <TextView
 
@@ -37,16 +37,19 @@
                 android:layout_gravity="center"
                 android:textStyle="bold"
                 android:layout_marginBottom="20dp"
-                android:textColor="@color/LightGrey"
+                android:drawableRight="@drawable/ic_logo"
+                android:textColor="@color/white"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:background="@drawable/background"/>
 
             <EditText
                 android:id="@+id/et_firstname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/prompt_firstname"
-                android:textColorHint="@color/Aqua"/>
+                android:textColorHint="@color/Aqua"
+                android:layout_below="@+id/tv_register"/>
 
 
             <EditText
@@ -54,14 +57,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/prompt_lastname"
-                android:textColorHint="@color/Aqua"/>
+                android:textColorHint="@color/Aqua"
+                android:layout_below="@id/et_firstname"/>
 
             <EditText
                 android:id="@+id/et_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/prompt_username"
-                android:textColorHint="@color/Aqua"/>
+                android:textColorHint="@color/Aqua"
+                android:layout_below="@id/et_lastname"/>
 
             <EditText
                 android:id="@+id/et_email"
@@ -71,7 +76,8 @@
                 android:textColorHint="@color/Aqua"
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:layout_below="@+id/et_username"/>
 
             <EditText
                 android:id="@+id/et_password"
@@ -82,18 +88,35 @@
                 android:inputType="textPassword"
                 android:layout_marginBottom="16dp"
                 android:maxLines="1"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:layout_below="@+id/et_email"/>
 
             <Button android:id="@+id/bt_register"
                 style="?android:textAppearanceSmall"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/action_sign_in"
-                android:textColor="@color/DarkRed"
-                android:textStyle="bold" />
+                android:textColor="@color/green"
+                android:background="@drawable/transparent"
+                android:textStyle="bold"
+                android:layout_marginLeft="25dp"
+                android:layout_below="@+id/et_password"
+                android:layout_alignRight="@+id/et_password"/>
+
+            <Button
+                style="?android:textAppearanceSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/bt_cancelR"
+                android:text="Cancel"
+                android:background="@drawable/transparent"
+                android:textStyle="bold"
+                android:textColor="@color/red"
+                android:layout_toLeftOf="@id/bt_register"
+                android:layout_alignTop="@+id/bt_register"/>
 
 
-        </LinearLayout>
+        </RelativeLayout>
     </ScrollView>
 
 </LinearLayout>
