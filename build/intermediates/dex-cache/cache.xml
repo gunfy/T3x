@@ -2,18 +2,11 @@
 <items version="2" >
 
     <item
-        jar="/Users/eymard/AndroidStudioProjects/T3x/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/jars/classes.jar"
+        jar="/Users/eymard/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/23.0.1/support-annotations-23.0.1.jar"
         jumboMode="false"
         revision="23.0.1"
-        sha1="d86429b0f0b3f3cafbeb78dda1b9d89119ccb05d">
-        <dex dex="/Users/eymard/AndroidStudioProjects/T3x/app/build/intermediates/pre-dexed/debug/classes-2198b9b08aa48d8b37db3c8d072f08f022d761c9.jar" />
-    </item>
-    <item
-        jar="/Users/eymard/AndroidStudioProjects/T3x/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-maps/7.5.0/jars/classes.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="06a42becc33232ec0ee125161da68c1829c9f8fd">
-        <dex dex="/Users/eymard/AndroidStudioProjects/T3x/app/build/intermediates/pre-dexed/debug/classes-c40dc0be41a389b0e27fc765ed44ca402b29d670.jar" />
+        sha1="1fce89a6428c51467090d7f424e4c9c3dbd55f7e">
+        <dex dex="/Users/eymard/AndroidStudioProjects/T3x/app/build/intermediates/pre-dexed/debug/support-annotations-23.0.1-6362b93a6329072a703dbfb656a9dcb5983509d9.jar" />
     </item>
     <item
         jar="/Users/eymard/AndroidStudioProjects/T3x/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.0.1/jars/libs/internal_impl-23.0.1.jar"
@@ -23,18 +16,25 @@
         <dex dex="/Users/eymard/AndroidStudioProjects/T3x/app/build/intermediates/pre-dexed/debug/internal_impl-23.0.1-9dfdcca26a1c159fffa2709aa9367e29293eab87.jar" />
     </item>
     <item
-        jar="/Users/eymard/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/23.0.1/support-annotations-23.0.1.jar"
+        jar="/Users/eymard/AndroidStudioProjects/T3x/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-maps/7.5.0/jars/classes.jar"
         jumboMode="false"
         revision="23.0.1"
-        sha1="1fce89a6428c51467090d7f424e4c9c3dbd55f7e">
-        <dex dex="/Users/eymard/AndroidStudioProjects/T3x/app/build/intermediates/pre-dexed/debug/support-annotations-23.0.1-6362b93a6329072a703dbfb656a9dcb5983509d9.jar" />
+        sha1="06a42becc33232ec0ee125161da68c1829c9f8fd">
+        <dex dex="/Users/eymard/AndroidStudioProjects/T3x/app/build/intermediates/pre-dexed/debug/classes-c40dc0be41a389b0e27fc765ed44ca402b29d670.jar" />
     </item>
     <item
-        jar="/Users/eymard/AndroidStudioProjects/T3x/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.0.1/jars/classes.jar"
+        jar="/Users/eymard/AndroidStudioProjects/T3x/app/build/intermediates/exploded-aar/com.android.support/design/23.0.1/jars/classes.jar"
         jumboMode="false"
         revision="23.0.1"
-        sha1="c31e21b53ff2f74664e498248d01453a32e32d48">
-        <dex dex="/Users/eymard/AndroidStudioProjects/T3x/app/build/intermediates/pre-dexed/debug/classes-dffa38fc1c0e0afe74621480067bbb5173433cc2.jar" />
+        sha1="e5c61a3169221a89654ffcaaed47bba51cf071ad">
+        <dex dex="/Users/eymard/AndroidStudioProjects/T3x/app/build/intermediates/pre-dexed/debug/classes-61e66cfc03c730f24b7d89bb5848b6ad5d3c32d3.jar" />
+    </item>
+    <item
+        jar="/Users/eymard/AndroidStudioProjects/T3x/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="d86429b0f0b3f3cafbeb78dda1b9d89119ccb05d">
+        <dex dex="/Users/eymard/AndroidStudioProjects/T3x/app/build/intermediates/pre-dexed/debug/classes-2198b9b08aa48d8b37db3c8d072f08f022d761c9.jar" />
     </item>
     <item
         jar="/Users/eymard/AndroidStudioProjects/T3x/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.5.0/jars/classes.jar"
@@ -44,11 +44,11 @@
         <dex dex="/Users/eymard/AndroidStudioProjects/T3x/app/build/intermediates/pre-dexed/debug/classes-20aaa0dcdda01b4d3cdcfcef9c825b7729343875.jar" />
     </item>
     <item
-        jar="/Users/eymard/AndroidStudioProjects/T3x/app/build/intermediates/exploded-aar/com.android.support/design/23.0.1/jars/classes.jar"
+        jar="/Users/eymard/AndroidStudioProjects/T3x/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.0.1/jars/classes.jar"
         jumboMode="false"
         revision="23.0.1"
-        sha1="e5c61a3169221a89654ffcaaed47bba51cf071ad">
-        <dex dex="/Users/eymard/AndroidStudioProjects/T3x/app/build/intermediates/pre-dexed/debug/classes-61e66cfc03c730f24b7d89bb5848b6ad5d3c32d3.jar" />
+        sha1="c31e21b53ff2f74664e498248d01453a32e32d48">
+        <dex dex="/Users/eymard/AndroidStudioProjects/T3x/app/build/intermediates/pre-dexed/debug/classes-dffa38fc1c0e0afe74621480067bbb5173433cc2.jar" />
     </item>
 
 </items>

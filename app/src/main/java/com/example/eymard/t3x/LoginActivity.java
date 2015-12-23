@@ -11,6 +11,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 
@@ -39,8 +44,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         switch (v.getId()){
             case R.id.bt_login:
 
-                //attemptLogin();
-                startActivity(new Intent(this, MainActivity.class));
+                attemptLogin();
 
                 break;
 
@@ -87,7 +91,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             focusView.requestFocus();
         } else {
             //"SELECT * FROM user WHERE email = '"+email+"' AND mdp = '"+password+"';"
-            String requete = "login" ;
+            JSONObject json = new JSONObject();
+
+            try {
+                json.put("ctrl", "login");
+                json.put("email", email);
+                json.put("password", password);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            String requete = json.toString();
+            Log.v("req", requete);
             HttpQuery login = new HttpQuery(requete, this);
             login.execute();
         }
@@ -95,11 +111,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
+
     @Override
     public void processFinish(String output) {
         Log.v("result", output);
-        Intent i = new Intent(this, MainActivity.class);
+        String out=output.replaceAll(" ", "");
 
+        if(out.equals("ok")){
+
+            startActivity(new Intent(this, MainActivity.class));
+
+        }else if (out.equals("erreur")){
+
+            Toast.makeText(getApplicationContext(),
+                    "email ou mot de passe incorrect",
+                    Toast.LENGTH_LONG).show();
+        }
 
     }
 

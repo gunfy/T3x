@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     Button btLocInfo;
     String title=null;
     DrawerLayout mDrawerLayout;
+    TextView username_profil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         //on recupere le widget
         btLocInfo = (Button)findViewById(R.id.locinfo);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        username_profil= (TextView) findViewById(R.id.tv_username_profil);
 
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);

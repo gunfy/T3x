@@ -23,17 +23,18 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class HttpQuery extends AsyncTask<String, String, String> {
 
-    private String Query = "";
+    private String Donnees = "";
     public AsyncResponse delegate = null;
     private String reponse = "";
 
-    public HttpQuery(String Q, AsyncResponse delegate) {
-        this.Query = Q;
+    public HttpQuery(String s, AsyncResponse delegate) {
+        this.Donnees = s;
         this.delegate = delegate;
     }
 
     @Override
     protected void onPostExecute(String result) { //// onPostExecute displays the results of the AsyncTask.
+
         delegate.processFinish(result);
     }
 
@@ -52,11 +53,11 @@ public class HttpQuery extends AsyncTask<String, String, String> {
             conn.setDoOutput(true);
 
             ContentValues values = new ContentValues();
-            values.put("request", this.Query);
+            values.put("request", this.Donnees);
 
             OutputStream os = conn.getOutputStream();
             BufferedWriter writer = new BufferedWriter( new OutputStreamWriter(os, "UTF-8"));
-            writer.write(getQuery(values));
+            writer.write(getDonnees(values));
             writer.flush();
             writer.close();
             os.close();
@@ -83,10 +84,9 @@ public class HttpQuery extends AsyncTask<String, String, String> {
         return response;
     }
 
-    private String getQuery(ContentValues params) throws UnsupportedEncodingException
+    private String getDonnees(ContentValues params) throws UnsupportedEncodingException
     {
         StringBuilder result = new StringBuilder();
-        boolean first = true;
 
         result.append("request");
         result.append("=");
@@ -95,8 +95,5 @@ public class HttpQuery extends AsyncTask<String, String, String> {
         return result.toString();
     }
 
-    public void changeQuery(String s) {
-        this.Query = s;
-    }
 
 }
