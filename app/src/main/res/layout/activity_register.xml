@@ -69,6 +69,14 @@
                 android:layout_below="@id/et_lastname"/>
 
             <EditText
+                android:id="@+id/et_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/prompt_number"
+                android:textColorHint="@color/Aqua"
+                android:layout_below="@id/et_username"/>
+
+            <EditText
                 android:id="@+id/et_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -77,7 +85,7 @@
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:layout_below="@+id/et_username"/>
+                android:layout_below="@+id/et_number"/>
 
             <EditText
                 android:id="@+id/et_password"

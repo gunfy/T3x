@@ -20,7 +20,7 @@ import org.json.JSONObject;
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener, AsyncResponse{
 
     private Button bt_register,bt_cancel;
-    private EditText et_firstname, et_lastname, et_username, et_email, et_password;
+    private EditText et_firstname, et_lastname, et_username, et_email, et_password,et_number;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +33,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         et_lastname =(EditText) findViewById(R.id.et_lastname);
         et_username =(EditText) findViewById(R.id.et_username);
         et_password=(EditText) findViewById(R.id.et_password);
+        et_number=(EditText) findViewById(R.id.et_number);
         et_email=(EditText) findViewById(R.id.et_email);
         et_password=(EditText) findViewById(R.id.et_password);
         bt_register=(Button) findViewById(R.id.bt_register);
@@ -77,6 +78,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         final String ft_name=et_firstname.getText().toString();
         final String lt_name=et_lastname.getText().toString();
         final String username=et_username.getText().toString();
+        final String number=et_number.getText().toString();
         final boolean finish = false;
         boolean cancel = false;
         View focusView = null;
@@ -102,7 +104,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             et_username.setError(getString(R.string.error_field_required));
             focusView = et_username;
             cancel = true;
+        }else if (TextUtils.isEmpty(number)){
+            et_number.setError(getString(R.string.error_field_required));
+            focusView = et_number;
+            cancel = true;
         }
+
 
         if (cancel) {
             // There was an error; don't attempt login and focus the first
@@ -118,6 +125,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 json.put("username",username);
                 json.put("lastname",lt_name);
                 json.put("firstname",ft_name);
+                json.put("number",number);
 
 
             } catch (JSONException e) {

@@ -7,6 +7,7 @@
     <string name="prompt_firstname">First name</string>
     <string name="prompt_lastname">Last name</string>
     <string name="prompt_username">Username</string>
+    <string name="prompt_number">Phone number</string>
     <string name="action_sign_in">SIGN IN</string>
     <string name="action_login">LOGIN</string>
     <string name="action_cancel">CANCEL</string>
@@ -41,6 +42,7 @@
     <string name="tv_username">Username :  </string>
     <string name="tv_email">Email :  </string>
     <string name="tv_id">ID :  </string>
+    <string name="tv_number">Phone number :  </string>
     <string name="bt_edit">Validate</string>
 
 

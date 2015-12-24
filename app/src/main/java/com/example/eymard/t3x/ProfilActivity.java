@@ -28,11 +28,11 @@ import java.util.concurrent.ExecutionException;
 
 public class ProfilActivity extends AppCompatActivity implements AsyncResponse {
 
-    TextView nom,prenom,username,email,sep,username_profil;
-    EditText et_email;
+    TextView nom,prenom,username,email,sep,username_profil,number;
+    EditText et_email,et_number;
     Button bt_modif,bt_cancel;
     DrawerLayout mDrawerLayout;
-    //public static final String MyPREFERENCES = "MyPrefs";
+    private static int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +44,10 @@ public class ProfilActivity extends AppCompatActivity implements AsyncResponse {
         prenom= (TextView) findViewById(R.id.tv_pr_ftName);
         username=(TextView) findViewById(R.id.tv_pr_username);
         email=(TextView) findViewById(R.id.tv_pr_email);
+        number=(TextView) findViewById(R.id.tv_pr_number);
         bt_modif= (Button) findViewById(R.id.bt_modif);
         et_email= (EditText) findViewById(R.id.et_pr_email);
+        et_number= (EditText) findViewById(R.id.et_pr_number);
         sep=(TextView) findViewById(R.id.sep);
         bt_cancel=(Button) findViewById(R.id.bt_cancelE);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -53,7 +55,8 @@ public class ProfilActivity extends AppCompatActivity implements AsyncResponse {
 
         //on recupere username du sharedpreferences
         SharedPreferences sharedpreferences = getSharedPreferences(LoginActivity.MyPREFERENCES, Context.MODE_PRIVATE);
-        username_profil.setText(sharedpreferences.getString("username","username"));
+        username_profil.setText(sharedpreferences.getString("username", "username"));
+        id=sharedpreferences.getInt("user_id",0);
 
 
         //les listener
@@ -69,7 +72,9 @@ public class ProfilActivity extends AppCompatActivity implements AsyncResponse {
             public void onClick(View v) {
                 sep.setVisibility(View.VISIBLE);
                 et_email.setText(email.getText());
+                et_number.setText(number.getText());
                 et_email.setVisibility(View.VISIBLE);
+                et_number.setVisibility(View.VISIBLE);
                 bt_modif.setVisibility(View.VISIBLE);
                 bt_cancel.setVisibility(View.VISIBLE);
                 findViewById(R.id.fab).setVisibility(View.GONE);
@@ -83,8 +88,9 @@ public class ProfilActivity extends AppCompatActivity implements AsyncResponse {
 
                 try {
                     jsonM.put("ctrl", "modifUser");
-                    jsonM.put("username", username.getText());
+                    jsonM.put("id", id);
                     jsonM.put("email", et_email.getText());
+                    jsonM.put("number", et_number.getText());
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -191,6 +197,7 @@ public class ProfilActivity extends AppCompatActivity implements AsyncResponse {
             prenom.setText(ob.getString("prenom"));
             username.setText(ob.getString("username"));
             email.setText(ob.getString("email"));
+            number.setText(ob.getString("numero"));
 
         } catch (InterruptedException e) {
             e.printStackTrace();

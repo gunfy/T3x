@@ -79,8 +79,6 @@
         android:text="@string/tv_email"
         android:layout_below="@+id/tv_pr_ftName"
         android:layout_marginTop="16dp"
-
-
         />
     <TextView
         android:layout_width="match_parent"
@@ -91,6 +89,25 @@
         android:layout_alignTop="@+id/tv_prf_email"
         android:layout_marginLeft="5dp"
         />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/tv_prf_number"
+        android:text="@string/tv_number"
+        android:layout_below="@+id/tv_prf_email"
+        android:layout_marginTop="16dp"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_pr_number"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_toRightOf="@+id/tv_prf_number"
+        android:layout_alignTop="@+id/tv_prf_number"
+        android:layout_marginLeft="5dp"
+        />
 
 
     <TextView
@@ -98,7 +115,7 @@
         android:layout_height="3dp"
         android:background="@drawable/background"
         android:layout_marginTop="30dp"
-        android:layout_below="@+id/tv_prf_email"
+        android:layout_below="@+id/tv_prf_number"
         android:id="@+id/sep"
         android:visibility="gone"/>
 
@@ -108,7 +125,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Email"
+        android:maxLines="1"
+        android:singleLine="true"
         android:layout_below="@+id/sep"
+        android:visibility="gone"/>
+
+    <EditText
+        android:id="@+id/et_pr_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Phone number"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:layout_below="@+id/et_pr_email"
         android:visibility="gone"/>
 
     <Button
@@ -118,7 +147,7 @@
         android:text="@string/bt_edit"
         android:textColor="@color/green"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/et_pr_email"
+        android:layout_below="@+id/et_pr_number"
         android:visibility="gone"/>
 
     <Button
