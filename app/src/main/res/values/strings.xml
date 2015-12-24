@@ -24,7 +24,7 @@
 
 
     <string name="drawer_header_text">Drawer Header</string>
-    <string name="nav_item_profil">My Profile</string>
+    <string name="nav_item_profil">Profile</string>
     <string name="nav_item_historic">Historicals</string>
     <string name="nav_sub_menu_about">About</string>
     <string name="nav_sub_menu">Informations</string>
@@ -32,5 +32,16 @@
 
 
     <string name="action_example">Example action</string>
+    <string name="title_activity_profil">ProfilActivity</string>
+
+    <string name="tv_firstname">First name :  </string>
+    <string name="tv_lastname">Last name :  </string>
+    <string name="tv_username">Username :  </string>
+    <string name="tv_email">Email :  </string>
+    <string name="tv_id">ID :  </string>
+    <string name="bt_edit">Validate</string>
+
+
+    <string name="hello_world">Hello world!</string>
 
 </resources>

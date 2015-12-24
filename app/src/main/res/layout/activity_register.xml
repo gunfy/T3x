@@ -92,25 +92,19 @@
                 android:layout_below="@+id/et_email"/>
 
             <Button android:id="@+id/bt_register"
-                style="?android:textAppearanceSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/action_sign_in"
                 android:textColor="@color/green"
-                android:background="@drawable/transparent"
-                android:textStyle="bold"
                 android:layout_marginLeft="25dp"
                 android:layout_below="@+id/et_password"
                 android:layout_alignRight="@+id/et_password"/>
 
             <Button
-                style="?android:textAppearanceSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/bt_cancelR"
                 android:text="@string/action_cancel"
-                android:background="@drawable/transparent"
-                android:textStyle="bold"
                 android:textColor="@color/red"
                 android:layout_toLeftOf="@id/bt_register"
                 android:layout_alignTop="@+id/bt_register"/>

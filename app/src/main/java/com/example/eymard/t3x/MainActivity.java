@@ -1,5 +1,6 @@
 package com.example.eymard.t3x;
 
+import android.content.Intent;
 import android.location.Location;
 import android.os.Handler;
 import android.os.Message;
@@ -74,7 +75,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 menuItem.setChecked(true);
                 mDrawerLayout.closeDrawers();
-                Toast.makeText(MainActivity.this, menuItem.getTitle(), Toast.LENGTH_LONG).show();
+                switch (menuItem.getTitle().toString()){
+                    case "Profile":
+                        startActivity(new Intent(MainActivity.this,ProfilActivity.class));
+                        break;
+
+                    default:
+                        Toast.makeText(MainActivity.this, menuItem.getTitle(), Toast.LENGTH_LONG).show();
+
+                }
                 return true;
             }
         });

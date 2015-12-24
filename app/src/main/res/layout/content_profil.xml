@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="16dp">
+
+
+   <ImageView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:src="@drawable/ic_profile"
+       android:layout_alignParentRight="true"
+       android:layout_marginTop="60dp"
+       android:layout_marginRight="5dp"
+       />
+    <TextView
+        android:id="@+id/tv_prf_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/tv_id"
+        android:layout_marginTop="110dp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/tv_pr_username"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/tv_prf_id"
+        android:layout_alignTop="@+id/tv_prf_id"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/tv_lastname"
+        android:id="@+id/tv_prf_ltname"
+        android:layout_below="@+id/tv_pr_username"
+        android:layout_marginTop="100dp"
+
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/tv_pr_ltName"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/tv_prf_ltname"
+        android:layout_alignTop="@+id/tv_prf_ltname"
+        />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/tv_firstname"
+        android:id="@+id/tv_prf_ftname"
+        android:layout_below="@+id/tv_pr_ltName"
+        android:layout_marginTop="16dp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/tv_pr_ftName"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/tv_prf_ftname"
+        android:layout_alignTop="@+id/tv_prf_ftname"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/tv_prf_email"
+        android:text="@string/tv_email"
+        android:layout_below="@+id/tv_pr_ftName"
+        android:layout_marginTop="16dp"
+
+
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_pr_email"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_toRightOf="@+id/tv_prf_email"
+        android:layout_alignTop="@+id/tv_prf_email"
+        android:layout_marginLeft="5dp"
+        />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@drawable/background"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/tv_prf_email"
+        android:id="@+id/sep"
+        android:visibility="gone"/>
+
+
+    <EditText
+        android:id="@+id/et_pr_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Email"
+        android:layout_below="@+id/sep"
+        android:visibility="gone"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/bt_modif"
+        android:text="@string/bt_edit"
+        android:textColor="@color/green"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/et_pr_email"
+        android:visibility="gone"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/bt_cancelE"
+        android:text="@string/action_cancel"
+        android:textColor="@color/red"
+        android:layout_toLeftOf="@id/bt_modif"
+        android:layout_alignTop="@+id/bt_modif"
+        android:visibility="gone"/>
+
+
+</RelativeLayout>
