@@ -24,9 +24,11 @@
 
 
     <string name="drawer_header_text">Drawer Header</string>
+    <string name="nav_item_home">Home</string>
     <string name="nav_item_profil">Profile</string>
     <string name="nav_item_historic">Historicals</string>
     <string name="nav_sub_menu_about">About</string>
+    <string name="nav_item_logout">Logout</string>
     <string name="nav_sub_menu">Informations</string>
 
 

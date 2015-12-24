@@ -144,8 +144,18 @@ public class ProfilActivity extends AppCompatActivity implements AsyncResponse {
                 menuItem.setChecked(true);
                 mDrawerLayout.closeDrawers();
                 switch (menuItem.getTitle().toString()){
+                    case "Home":
+                        finish();
+                        startActivity(new Intent(ProfilActivity.this,MainActivity.class));
+                        break;
                     case "Profile":
+                        finish();
                         startActivity(new Intent(ProfilActivity.this,ProfilActivity.class));
+                        break;
+                    case "Logout":
+                        finish();
+                        startActivity(new Intent(ProfilActivity.this, LoginActivity.class));
+
                         break;
 
                     default:

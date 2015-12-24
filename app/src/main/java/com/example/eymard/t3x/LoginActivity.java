@@ -144,8 +144,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 String reponse =infosUser.execute().get();
                 JSONObject ob=new JSONObject(reponse);
                 //on ecrit dans le shared preferences
-                editor.putInt("user_id",ob.getInt("id"));
-                editor.putString("username",ob.getString("username"));
+                editor.putInt("user_id", ob.getInt("id"));
+                editor.putString("username", ob.getString("username"));
                 editor.commit();
 
             } catch (InterruptedException e) {
@@ -155,8 +155,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
+            finish();
             startActivity(new Intent(this, MainActivity.class));
+
 
         }else if (out.equals("erreur")){
 

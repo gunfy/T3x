@@ -84,8 +84,18 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 menuItem.setChecked(true);
                 mDrawerLayout.closeDrawers();
                 switch (menuItem.getTitle().toString()){
+                    case "Home":
+                        finish();
+                        startActivity(new Intent(MainActivity.this, MainActivity.class));
+
                     case "Profile":
-                        startActivity(new Intent(MainActivity.this,ProfilActivity.class));
+                        finish();
+                        startActivity(new Intent(MainActivity.this, ProfilActivity.class));
+
+                        break;
+                    case "Logout":
+                        finish();
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
                         break;
 
                     default:
