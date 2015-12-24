@@ -1,6 +1,8 @@
 package com.example.eymard.t3x;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -26,10 +28,11 @@ import java.util.concurrent.ExecutionException;
 
 public class ProfilActivity extends AppCompatActivity implements AsyncResponse {
 
-    TextView nom,prenom,username,email,sep;
+    TextView nom,prenom,username,email,sep,username_profil;
     EditText et_email;
     Button bt_modif,bt_cancel;
     DrawerLayout mDrawerLayout;
+    //public static final String MyPREFERENCES = "MyPrefs";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +49,11 @@ public class ProfilActivity extends AppCompatActivity implements AsyncResponse {
         sep=(TextView) findViewById(R.id.sep);
         bt_cancel=(Button) findViewById(R.id.bt_cancelE);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        username_profil= (TextView) findViewById(R.id.tv_username_profil);
+
+        //on recupere username du sharedpreferences
+        SharedPreferences sharedpreferences = getSharedPreferences(LoginActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+        username_profil.setText(sharedpreferences.getString("username","username"));
 
 
         //les listener
@@ -154,8 +162,8 @@ public class ProfilActivity extends AppCompatActivity implements AsyncResponse {
         JSONObject json = new JSONObject();
 
         try {
-            json.put("ctrl", "infosUser");
-            json.put("email", "teddy@free.fr");
+            json.put("ctrl", "infosUserById");
+            json.put("id",sharedpreferences.getInt("user_id",0));
 
         } catch (JSONException e) {
             e.printStackTrace();

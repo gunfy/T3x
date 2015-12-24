@@ -1,6 +1,8 @@
 package com.example.eymard.t3x;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -17,6 +19,7 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.concurrent.ExecutionException;
 
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener, AsyncResponse {
@@ -24,6 +27,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private Button bt_login;
     private EditText et_email, et_password;
     private TextView bt_registerLink;
+    public static final String MyPREFERENCES = "MyPrefs";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +94,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             // form field with an error.
             focusView.requestFocus();
         } else {
-            //"SELECT * FROM user WHERE email = '"+email+"' AND mdp = '"+password+"';"
             JSONObject json = new JSONObject();
 
             try {
@@ -118,6 +121,40 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         String out=output.replaceAll(" ", "");
 
         if(out.equals("ok")){
+
+            //on recupere les infos pour le sharedPreferences
+            String mail;
+
+            JSONObject jsonPref = new JSONObject();
+
+            try {
+                jsonPref.put("ctrl", "infosUserByMail");
+                jsonPref.put("email", et_email.getText().toString());
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            String req = jsonPref.toString();
+            Log.v("reqAllinfosUser", req);
+            HttpQuery infosUser = new HttpQuery(req, this);
+            SharedPreferences sharedpreferences = getSharedPreferences(LoginActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedpreferences.edit();
+            try {
+                String reponse =infosUser.execute().get();
+                JSONObject ob=new JSONObject(reponse);
+                //on ecrit dans le shared preferences
+                editor.putInt("user_id",ob.getInt("id"));
+                editor.putString("username",ob.getString("username"));
+                editor.commit();
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
             startActivity(new Intent(this, MainActivity.class));
 

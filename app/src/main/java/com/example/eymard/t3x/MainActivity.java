@@ -1,6 +1,8 @@
 package com.example.eymard.t3x;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Handler;
 import android.os.Message;
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     String title=null;
     DrawerLayout mDrawerLayout;
     TextView username_profil;
+    //public static final String MyPREFERENCES = "MyPrefs";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +53,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         btLocInfo = (Button)findViewById(R.id.locinfo);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         username_profil= (TextView) findViewById(R.id.tv_username_profil);
+
+
+        //on recupere username du sharedpreferences
+        SharedPreferences sharedpreferences = getSharedPreferences(LoginActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+        username_profil.setText(sharedpreferences.getString("username","username"));
 
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
