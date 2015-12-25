@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -22,23 +22,53 @@
         <Button
             android:id="@+id/locinfo"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/white"
-            android:textSize="16dp"
-            android:layout_below="@+id/toolbar"
+
             android:background="@drawable/bt_locinfo"
             android:gravity="center"/>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <fragment
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                />
 
-        <fragment
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_below="@+id/locinfo"
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            />
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_m1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|bottom"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="80dp"
+                app:fab_icon="@drawable/ic_depart"
+                />
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_m2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:layout_gravity="center|bottom"
+                app:fab_icon="@drawable/ic_arrivee"
+                />
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_m3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:layout_gravity="right|bottom"
+                app:fab_icon="@drawable/ic_annuler"
+                />
+        </FrameLayout>
+
+    </LinearLayout>
 
 
-    </RelativeLayout>
 
     <android.support.design.widget.NavigationView
         android:id="@+id/navigation_view"

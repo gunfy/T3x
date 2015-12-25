@@ -63,7 +63,7 @@ public class ProfilActivity extends AppCompatActivity implements AsyncResponse {
         bt_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ProfilActivity.this,ProfilActivity.class));
+                startActivity(new Intent(ProfilActivity.this, ProfilActivity.class));
             }
         });
 
@@ -151,17 +151,19 @@ public class ProfilActivity extends AppCompatActivity implements AsyncResponse {
                 mDrawerLayout.closeDrawers();
                 switch (menuItem.getTitle().toString()){
                     case "Home":
-                        finish();
+                        //finish();
                         startActivity(new Intent(ProfilActivity.this,MainActivity.class));
                         break;
                     case "Profile":
-                        finish();
+                        //finish();
                         startActivity(new Intent(ProfilActivity.this,ProfilActivity.class));
                         break;
                     case "Logout":
-                        finish();
-                        startActivity(new Intent(ProfilActivity.this, LoginActivity.class));
-
+                        //finish();
+                        //startActivity(new Intent(ProfilActivity.this, LoginActivity.class));
+                        Intent intent = new Intent(ProfilActivity.this, LoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
                         break;
 
                     default:

@@ -57,14 +57,14 @@ public class AddressLocation extends AsyncTask<String, String, String> {
 
     @Override
     protected void onPostExecute(String address) {
-
+        /*
         if (!(address=="")){
             Toast.makeText(mainContxt, address,
                     Toast.LENGTH_LONG).show();
         }else{
             Toast.makeText(mainContxt, "No Location found",
                     Toast.LENGTH_LONG).show();
-        }
+        }*/
 
     }
 
