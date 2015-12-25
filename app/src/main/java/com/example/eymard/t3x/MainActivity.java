@@ -32,6 +32,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.concurrent.ExecutionException;
+
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener/*,
         GoogleMap.OnMapLongClickListener*/, GoogleMap.OnMarkerDragListener/*,GoogleMap.OnMarkerClickListener*/ {
 
@@ -42,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     String title=null;
     DrawerLayout mDrawerLayout;
     TextView username_profil;
-    //public static final String MyPREFERENCES = "MyPrefs";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,10 +153,31 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMarkerDragEnd(Marker mark){
         LatLng myPoint=mark.getPosition();
+        /*
         LocationAddress locationAddress = new LocationAddress();
         locationAddress.getAddressFromLocation(myPoint.latitude, myPoint.longitude,
                 getApplicationContext(), new GeocoderHandler());
         mark.setTitle(title);
+        */
+        AddressLocation addressLocation=new AddressLocation(myPoint.latitude, myPoint.longitude,
+                getApplicationContext());
+
+        try {
+            String rep= addressLocation.execute().get();
+            //Log.i("reponse geocoder",rep);
+            if (rep.equals("")){
+                title="Unable to get address for this lat-long";
+            }else {
+                title=rep;
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        mark.setTitle(title);
+        btLocInfo.setText(title);
 
     }
     /*
@@ -233,6 +256,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     //cette classe geohandler permet de recuperer le message envoyer par le thread LocationAddress
+    /*
     private class GeocoderHandler extends Handler {
 
         //on surchage la methode pour l'adapter à notre besoin
@@ -251,7 +275,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             title=locationAddress;
             btLocInfo.setText(locationAddress);
         }
-    }
+    }*/
 }
 
 
