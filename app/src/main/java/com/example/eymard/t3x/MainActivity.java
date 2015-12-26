@@ -10,6 +10,7 @@ import android.location.LocationManager;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -37,19 +38,31 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+
+
 import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerDragListener, GoogleMap.OnMarkerClickListener {
 
     final int RQS_GooglePlayServices = 1;
     GoogleMap myMap;
-    Marker myMarker;
+    Marker myMarker,myMarker2;
     Button btLocInfo;
     String title = null;
     DrawerLayout mDrawerLayout;
     TextView username_profil;
     int mode=0;   //0 normal/1 driver
+    int user_id;
     Location myLocation = null;
+    JSONObject myCourse=new JSONObject();
+    Boolean ordre=false;
+    Boolean send=false;
+    //String depart,arrivee;
+    LatLng depart,arrivee;
+
 
 
     @Override
@@ -61,11 +74,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         btLocInfo = (Button) findViewById(R.id.locinfo);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         username_profil = (TextView) findViewById(R.id.tv_username_profil);
+        gestionFab();
 
-
-        //on recupere username du sharedpreferences
+        //on recupere id et username du sharedpreferences
         SharedPreferences sharedpreferences = getSharedPreferences(LoginActivity.MyPREFERENCES, Context.MODE_PRIVATE);
         username_profil.setText(sharedpreferences.getString("username", "username"));
+        user_id=sharedpreferences.getInt("user_id", 0);
 
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -134,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         // Getting the name of the best provider
         String provider = locationManager.getBestProvider(criteria, true);
         // Getting Current Location
-        if (ContextCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    public void requestPermissions(@NonNull String[] permissions, int requestCode)
             // here to request the missing permissions, and then overriding
@@ -174,9 +188,31 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             myMarker = map.addMarker(new MarkerOptions()
                             .position(defaut)
                             .draggable(true)
+                            //.title("Depart")
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
             );
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(defaut, 16));
+
+            AddressLocation addressLocation=new AddressLocation(defaut.latitude, defaut.longitude,
+                    getApplicationContext());
+
+            try {
+                String rep= addressLocation.execute().get();
+                //Log.i("reponse geocoder",rep);
+                if (rep.equals("")){
+                    title="Unable to get address for this lat-long";
+                }else {
+                    title=rep;
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+
+            myMarker.setTitle(title);
+            btLocInfo.setText(title);
+
         }
 
 
@@ -202,7 +238,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             e.printStackTrace();
         }
 
-        mark.setTitle("Depart");
+        mark.setTitle(title);
         btLocInfo.setText(title);
 
 
@@ -239,7 +275,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             e.printStackTrace();
         }
 
-        mark.setTitle("Depart");
+        mark.setTitle(title);
         btLocInfo.setText(title);
 
     }
@@ -291,6 +327,160 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         map.setMyLocationEnabled(true);
 
     }
+
+    public void gestionFab(){
+
+
+        //fab depart
+        findViewById(R.id.fab_m1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                depart=myMarker.getPosition();
+                //depart=myMarker.getPosition().latitude+","+myMarker.getPosition().longitude;
+                myMarker.setDraggable(false);
+                //on crée le nouveau marqueur pour definir l'arrivée
+                LatLng defaut=new LatLng(myLocation.getLatitude(),myLocation.getLongitude());
+                myMarker2 = myMap.addMarker(new MarkerOptions()
+                                .position(defaut)
+                                .draggable(true)
+                        //.title("Arrivee")
+                );
+
+                AddressLocation addressLocation=new AddressLocation(defaut.latitude, defaut.longitude,
+                        getApplicationContext());
+
+                try {
+                    String rep= addressLocation.execute().get();
+                    //Log.i("reponse geocoder",rep);
+                    if (rep.equals("")){
+                        title="Unable to get address for this lat-long";
+                    }else {
+                        title=rep;
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+
+                myMarker.setTitle(title);
+                btLocInfo.setText(title);
+
+                //on ajoute dans myCourse
+                try {
+                    myCourse.put("ctrl","course");
+                    myCourse.put("user_id",user_id);
+                    myCourse.put("depart",depart.toString());
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Log.i("********Valeurs course en cours",myCourse.toString());
+                findViewById(R.id.fab_m1).setVisibility(View.GONE);
+                ordre=true;
+            }
+        });
+
+        //fab arrivee
+        findViewById(R.id.fab_m2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (ordre) {
+                    Log.i("-------ordre", "on est bien dans le bon ordre");
+                    arrivee = myMarker2.getPosition();
+                    //arrivee=myMarker2.getPosition().latitude+","+myMarker2.getPosition().longitude;
+                    Log.i("current position of fab_m2", arrivee.toString());
+                    //Toast.makeText(getApplicationContext(),"C'est bon c'est dans l'ordre",Toast.LENGTH_SHORT).show();
+                    try {
+                        myCourse.put("arrivee", arrivee);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    Log.i("********Valeurs course en cours", myCourse.toString());
+
+                    Snackbar snackbar = Snackbar
+                            .make(findViewById(R.id.coordinatorLayout), getString(R.string.snack_msg), Snackbar.LENGTH_LONG)
+                            .setAction(getString(R.string.snack_bt), new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    HTTPRequest course = new HTTPRequest(myCourse.toString());
+
+                                    String rep = "";
+                                    try {
+                                        rep = course.execute().get();
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    } catch (ExecutionException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    String out = rep.replaceAll(" ", "");
+                                    if (out.equals("ok")) {
+                                        myMarker2.setDraggable(false);
+                                        findViewById(R.id.fab_m2).setVisibility(View.GONE);
+                                        send=true;
+                                        Snackbar snackbar1 = Snackbar.make(findViewById(R.id.coordinatorLayout), getString(R.string.snack_order_send), Snackbar.LENGTH_SHORT);
+                                        snackbar1.show();
+                                    } else {
+                                        Snackbar snackbar1 = Snackbar.make(findViewById(R.id.coordinatorLayout), "error", Snackbar.LENGTH_SHORT);
+                                        snackbar1.show();
+                                    }
+
+                                }
+                            });
+                    snackbar.show();
+
+                }
+            }
+        });
+
+        //fab annulee
+        findViewById(R.id.fab_m3).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (send=true){
+                    //remove in the database the order
+                    JSONObject remove =new JSONObject();
+
+                    try {
+                        remove.put("ctrl","removeCourse");
+                        remove.put("user_id", user_id);
+                        remove.put("depart",depart.toString());
+                        remove.put("arrivee", arrivee.toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    HTTPRequest cancel = new HTTPRequest(remove.toString());
+                    String rep1 = "";
+                    try {
+                        rep1 = cancel.execute().get();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    }
+
+                    String out1 = rep1.replaceAll(" ", "");
+                    if (out1.equals("ok")) {
+                        Toast.makeText(getApplicationContext(),"order canceled",Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(getApplicationContext(),"error cancel",Toast.LENGTH_SHORT).show();
+                    }
+
+
+                }
+
+                finish();
+                startActivity(new Intent(MainActivity.this, MainActivity.class));
+
+            }
+        });
+    }
+
+
 
 }
 

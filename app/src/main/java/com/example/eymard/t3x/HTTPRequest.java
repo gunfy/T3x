@@ -17,29 +17,19 @@ import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 
 /**
- * Created by eymard on 08/12/2015.
+ * Created by eymard on 26/12/2015.
  */
+public class HTTPRequest extends AsyncTask<String, String, String> {
 
+    private String requete = "";
 
-public class HttpQuery extends AsyncTask<String, String, String> {
-
-    private String Donnees = "";
-    public AsyncResponse delegate = null;
-
-
-    public HttpQuery(String s) {
-        this.Donnees = s;
-    }
-
-    public HttpQuery(String s, AsyncResponse delegate) {
-        this.Donnees = s;
-        this.delegate = delegate;
+    public HTTPRequest(String r) {
+        this.requete = r;
     }
 
     @Override
     protected void onPostExecute(String result) { //// onPostExecute displays the results of the AsyncTask.
 
-        delegate.processFinish(result);
     }
 
     @Override
@@ -57,11 +47,11 @@ public class HttpQuery extends AsyncTask<String, String, String> {
             conn.setDoOutput(true);
 
             ContentValues values = new ContentValues();
-            values.put("request", this.Donnees);
+            values.put("request", this.requete);
 
             OutputStream os = conn.getOutputStream();
             BufferedWriter writer = new BufferedWriter( new OutputStreamWriter(os, "UTF-8"));
-            writer.write(getDonnees(values));
+            writer.write(getRequete(values));
             writer.flush();
             writer.close();
             os.close();
@@ -88,7 +78,7 @@ public class HttpQuery extends AsyncTask<String, String, String> {
         return response;
     }
 
-    private String getDonnees(ContentValues params) throws UnsupportedEncodingException
+    private String getRequete(ContentValues params) throws UnsupportedEncodingException
     {
         StringBuilder result = new StringBuilder();
 
@@ -99,5 +89,5 @@ public class HttpQuery extends AsyncTask<String, String, String> {
         return result.toString();
     }
 
-
 }
+

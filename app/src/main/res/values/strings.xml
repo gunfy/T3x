@@ -45,6 +45,11 @@
     <string name="tv_number">Phone number :  </string>
     <string name="bt_edit">Validate</string>
 
+    <string name="snack_msg">Order ?</string>
+    <string name="snack_bt"> Accept</string>
+    <string name="snack_order_send"> Order send</string>
+
+
 
     <string name="hello_world">Hello world!</string>
 
