@@ -4,11 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -19,10 +23,12 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
@@ -43,10 +49,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.concurrent.ExecutionException;
 
-public class DriverActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+public class DriverActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener,GoogleMap.OnInfoWindowClickListener {
 
     final int RQS_GooglePlayServices = 1;
     GoogleMap myMap;
@@ -59,10 +69,13 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
     Location myLocation = null;
     JSONObject myCourse=new JSONObject();
     JSONArray donneesCourse= new JSONArray();
-    Boolean ordre=false;
-    Boolean send=false;
+    Marker [] tabM;
+    Boolean isOk=true;
+    Boolean notBusy=true;
     //String depart,arrivee;
     LatLng depart,arrivee;
+    private HashMap<Marker, JSONObject> mHashMap = new HashMap<Marker, JSONObject>();
+    String number;
 
 
 
@@ -169,7 +182,7 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
 
         //myMap.setOnMapClickListener(this);
         //myMap.setOnMapLongClickListener(this);
-
+        myMap.setOnInfoWindowClickListener(this);
 
 
     }
@@ -179,6 +192,7 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
     public void onMapReady(GoogleMap map) {
 
         setUpMap(map);
+
         //on définit notre marqueur
         if (myLocation==null){
             LatLng mtp = new LatLng(43.6, 3.8833);
@@ -223,11 +237,14 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
                 String [] tab= mySplit(jsonOb.getString("depart"));
                 LatLng def= new LatLng(Double.parseDouble(tab[0]),Double.parseDouble(tab[1]));
                 Log.i("******* position marker", def.toString());
-                map.addMarker(new MarkerOptions()
-                        .position(def)
-                        .draggable(false)
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                Marker marker=map.addMarker(new MarkerOptions()
+                                .position(def)
+                                .draggable(false)
+                                .title(jsonOb.getString("descDep"))
+                                .snippet("Username : " + jsonOb.getString("username") + "\n" + "Destination : " + jsonOb.getString("descArr"))
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                 );
+                mHashMap.put(marker, jsonOb);
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -245,6 +262,8 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
     public boolean onMarkerClick(Marker marker) {
         return false;
     }
+
+
 
 
 
@@ -291,6 +310,39 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
         //affichage de ma localisation
         map.setMyLocationEnabled(true);
 
+
+        map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+
+            @Override
+            public View getInfoWindow(Marker arg0) {
+                return null;
+            }
+
+            @Override
+            public View getInfoContents(Marker marker) {
+
+                Context context = getApplicationContext(); //or getActivity(), YourActivity.this, etc.
+
+                LinearLayout info = new LinearLayout(context);
+                info.setOrientation(LinearLayout.VERTICAL);
+
+                TextView title = new TextView(context);
+                title.setTextColor(Color.BLACK);
+                title.setGravity(Gravity.CENTER);
+                title.setTypeface(null, Typeface.BOLD);
+                title.setText(marker.getTitle());
+
+                TextView snippet = new TextView(context);
+                snippet.setTextColor(Color.GRAY);
+                snippet.setText(marker.getSnippet());
+
+                info.addView(title);
+                info.addView(snippet);
+
+                return info;
+            }
+        });
+
     }
 
     public void gestionFab(){
@@ -300,7 +352,11 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
         findViewById(R.id.fab_call_dr).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if (isOk) {
+                    Intent callIntent = new Intent(Intent.ACTION_CALL);
+                    callIntent.setData(Uri.parse("tel:" + number));
+                    startActivity(callIntent);
+                }
             }
         });
 
@@ -324,5 +380,55 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
     }
 
 
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        if (notBusy) {
+            final JSONObject json = mHashMap.get(marker);
+            Snackbar snackbar = Snackbar
+                    .make(findViewById(R.id.coordinatorLayoutDr), getString(R.string.snack_dr_msg), Snackbar.LENGTH_LONG)
+                    .setAction(getString(R.string.snack_dr_msg1), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            JSONObject obj = new JSONObject();
+                            try {
+                                obj.put("ctrl", "acceptCourse");
+                                obj.put("id_course", json.getInt("id"));
+                                obj.put("id_user", user_id);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            HTTPRequest acceptcourse = new HTTPRequest(obj.toString());
 
+                            String rep = "";
+                            try {
+                                rep = acceptcourse.execute().get();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            } catch (ExecutionException e) {
+                                e.printStackTrace();
+                            }
+
+                            String out = rep.replaceAll(" ", "");
+                            if (out.equals("ok")) {
+                                findViewById(R.id.fab_call_dr).setVisibility(View.VISIBLE);
+                                findViewById(R.id.fab_cancel_dr).setVisibility(View.VISIBLE);
+                                try {
+                                    number = json.getString("numero");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                notBusy=false;
+                            } else {
+                                Snackbar snackbar1 = Snackbar.make(findViewById(R.id.coordinatorLayoutDr), "error", Snackbar.LENGTH_SHORT);
+                                snackbar1.show();
+                                findViewById(R.id.fab_call_dr).setVisibility(View.GONE);
+                                findViewById(R.id.fab_cancel_dr).setVisibility(View.GONE);
+                                isOk = false;
+                            }
+
+                        }
+                    });
+            snackbar.show();
+        }
+    }
 }

@@ -49,6 +49,8 @@
     <string name="snack_msg_arrivee">Indicate the end point</string>
     <string name="snack_msg">Order ?</string>
     <string name="snack_bt"> Accept</string>
+    <string name="snack_dr_msg"> Accept ?</string>
+    <string name="snack_dr_msg1"> Yes </string>
     <string name="snack_order_send"> Order send</string>
 
 

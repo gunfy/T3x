@@ -346,6 +346,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onClick(View v) {
                 depart=myMarker.getPosition();
+                String titleDep=title;
                 //depart=myMarker.getPosition().latitude+","+myMarker.getPosition().longitude;
                 myMarker.setDraggable(false);
                 Snackbar snackbar1 = Snackbar.make(findViewById(R.id.coordinatorLayout),getString(R.string.snack_msg_arrivee), Snackbar.LENGTH_LONG);
@@ -383,6 +384,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     myCourse.put("ctrl","course");
                     myCourse.put("user_id",user_id);
                     myCourse.put("depart",depart.toString());
+                    myCourse.put("descDepart",titleDep);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -402,11 +404,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 if (ordre) {
                     Log.i("-------ordre", "on est bien dans le bon ordre");
                     arrivee = myMarker2.getPosition();
+                    String titleArr=title;
                     //arrivee=myMarker2.getPosition().latitude+","+myMarker2.getPosition().longitude;
                     Log.i("current position of fab_m2", arrivee.toString());
                     //Toast.makeText(getApplicationContext(),"C'est bon c'est dans l'ordre",Toast.LENGTH_SHORT).show();
                     try {
                         myCourse.put("arrivee", arrivee);
+                        myCourse.put("descArrivee", titleArr);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
