@@ -1,5 +1,6 @@
 package com.example.eymard.t3x;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -107,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 mDrawerLayout.closeDrawers();
                 switch (menuItem.getTitle().toString()) {
                     case "Home":
-                        //finish();
+                        finish();
                         startActivity(new Intent(MainActivity.this, MainActivity.class));
 
                     case "Profile":
@@ -121,6 +122,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
+                        break;
+
+                    case "Driver mode":
+                        startActivity(new Intent(MainActivity.this, DriverActivity.class));
                         break;
 
                     default:
@@ -143,10 +148,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         // Creating a criteria object to retrieve provider
-        Criteria criteria = new Criteria();
+        //Criteria criteria = new Criteria();
 
         // Getting the name of the best provider
-        String provider = locationManager.getBestProvider(criteria, true);
+        //String provider = locationManager.getBestProvider(criteria, true);
+        //Log.i("*****my provider", provider);
         // Getting Current Location
         if (ContextCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -158,7 +164,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             // for Activity#requestPermissions for more details.
             return;
         }
-        myLocation = locationManager.getLastKnownLocation(provider);
+        //utilisation de du provider NETWORK car GPS met trop de temps
+        myLocation = locationManager.getLastKnownLocation("network");
+
+
 
         //myMap.setOnMapClickListener(this);
         //myMap.setOnMapLongClickListener(this);
@@ -173,6 +182,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap map) {
 
         setUpMap(map);
+
         //on définit notre marqueur
         if (myLocation==null){
             LatLng mtp = new LatLng(43.6, 3.8833);
@@ -191,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             //.title("Depart")
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
             );
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(defaut, 16));
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(defaut, 17));
 
             AddressLocation addressLocation=new AddressLocation(defaut.latitude, defaut.longitude,
                     getApplicationContext());
@@ -338,6 +348,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 depart=myMarker.getPosition();
                 //depart=myMarker.getPosition().latitude+","+myMarker.getPosition().longitude;
                 myMarker.setDraggable(false);
+                Snackbar snackbar1 = Snackbar.make(findViewById(R.id.coordinatorLayout),getString(R.string.snack_msg_arrivee), Snackbar.LENGTH_LONG);
+                snackbar1.show();
                 //on crée le nouveau marqueur pour definir l'arrivée
                 LatLng defaut=new LatLng(myLocation.getLatitude(),myLocation.getLongitude());
                 myMarker2 = myMap.addMarker(new MarkerOptions()
@@ -345,7 +357,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 .draggable(true)
                         //.title("Arrivee")
                 );
-
+                myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaut, 17));
                 AddressLocation addressLocation=new AddressLocation(defaut.latitude, defaut.longitude,
                         getApplicationContext());
 
@@ -377,6 +389,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
                 Log.i("********Valeurs course en cours",myCourse.toString());
                 findViewById(R.id.fab_m1).setVisibility(View.GONE);
+                findViewById(R.id.fab_m3).setVisibility(View.VISIBLE);
                 ordre=true;
             }
         });
@@ -423,6 +436,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                         send=true;
                                         Snackbar snackbar1 = Snackbar.make(findViewById(R.id.coordinatorLayout), getString(R.string.snack_order_send), Snackbar.LENGTH_SHORT);
                                         snackbar1.show();
+
+                                        /*ProgressDialog.show(MainActivity.this,
+                                                    "", "Recherche de driver", true);*/
+
                                     } else {
                                         Snackbar snackbar1 = Snackbar.make(findViewById(R.id.coordinatorLayout), "error", Snackbar.LENGTH_SHORT);
                                         snackbar1.show();
@@ -440,7 +457,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         findViewById(R.id.fab_m3).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (send=true){
+                if (send){
                     //remove in the database the order
                     JSONObject remove =new JSONObject();
 
@@ -476,8 +493,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 finish();
                 startActivity(new Intent(MainActivity.this, MainActivity.class));
 
+
             }
         });
+
     }
 
 

@@ -30,6 +30,7 @@
     <string name="nav_item_historic">Historicals</string>
     <string name="nav_sub_menu_about">About</string>
     <string name="nav_item_logout">Logout</string>
+    <string name="nav_item_mode">Driver mode</string>
     <string name="nav_sub_menu">Informations</string>
 
 
@@ -45,6 +46,7 @@
     <string name="tv_number">Phone number :  </string>
     <string name="bt_edit">Validate</string>
 
+    <string name="snack_msg_arrivee">Indicate the end point</string>
     <string name="snack_msg">Order ?</string>
     <string name="snack_bt"> Accept</string>
     <string name="snack_order_send"> Order send</string>
@@ -52,5 +54,6 @@
 
 
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_driver">DriverActivity</string>
 
 </resources>
