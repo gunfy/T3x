@@ -49,13 +49,13 @@
                     />
 
                 <com.getbase.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/fab_cancel_dr"
+                    android:id="@+id/fab_ok_dr"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
                     android:visibility="gone"
                     android:layout_gravity="right|bottom"
-                    app:fab_icon="@drawable/ic_annuler"
+                    app:fab_icon="@drawable/ic_done"
                     />
             </FrameLayout>
 

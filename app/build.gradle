@@ -4,6 +4,7 @@ android {
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
 
+
     defaultConfig {
         applicationId "com.example.eymard.t3x"
         minSdkVersion 15

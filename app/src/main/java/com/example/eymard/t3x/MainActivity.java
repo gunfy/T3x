@@ -110,6 +110,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     case "Home":
                         finish();
                         startActivity(new Intent(MainActivity.this, MainActivity.class));
+                        break;
 
                     case "Profile":
                         //finish();
