@@ -1,4 +1,4 @@
-package com.example.eymard.t3x;
+package Services;
 
 import com.google.android.gms.maps.model.LatLng;
 

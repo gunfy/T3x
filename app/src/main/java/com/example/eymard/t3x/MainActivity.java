@@ -2,28 +2,27 @@ package com.example.eymard.t3x;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.Handler;
-import android.os.Message;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
@@ -39,12 +38,17 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 
-
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ExecutionException;
+
+import Tasks.AddressLocation;
+import Tasks.HTTPRequest;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerDragListener, GoogleMap.OnMarkerClickListener {
 
@@ -63,6 +67,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     Boolean send=false;
     //String depart,arrivee;
     LatLng depart,arrivee;
+    ProgressDialog myProg;
+    String test="erreur";
+    String res; String req;
+    JSONObject myDriver=new JSONObject();
+    String number;
+
 
 
 
@@ -81,7 +91,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         SharedPreferences sharedpreferences = getSharedPreferences(LoginActivity.MyPREFERENCES, Context.MODE_PRIVATE);
         username_profil.setText(sharedpreferences.getString("username", "username"));
         user_id=sharedpreferences.getInt("user_id", 0);
-
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
@@ -436,14 +445,35 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                                     String out = rep.replaceAll(" ", "");
                                     if (out.equals("ok")) {
+
                                         myMarker2.setDraggable(false);
                                         findViewById(R.id.fab_m2).setVisibility(View.GONE);
-                                        send=true;
                                         Snackbar snackbar1 = Snackbar.make(findViewById(R.id.coordinatorLayout), getString(R.string.snack_order_send), Snackbar.LENGTH_SHORT);
                                         snackbar1.show();
+                                        send=true;
+                                        /*
+                                        myProg= new ProgressDialog(MainActivity.this);
+                                        myProg.setMessage(getString(R.string.msg_res_dr));
+                                        myProg.setCancelable(true);
+                                        myProg.show();
+                                        Research research=new Research();
+                                        research.execute();*/
+                                        JSONObject jObj=new JSONObject();
+                                        try {
+                                            jObj.put("ctrl","checkDriver");
+                                            jObj.put("user_id",user_id);
+                                            jObj.put("depart",depart.toString());
+                                            jObj.put("arrivee",arrivee.toString());
 
-                                        /*ProgressDialog.show(MainActivity.this,
-                                                    "", "Recherche de driver", true);*/
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                        req=jObj.toString();
+
+
+
+                                        BackgroundTask task = new BackgroundTask(MainActivity.this);
+                                        task.execute();
 
                                     } else {
                                         Snackbar snackbar1 = Snackbar.make(findViewById(R.id.coordinatorLayout), "error", Snackbar.LENGTH_SHORT);
@@ -454,7 +484,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             });
                     snackbar.show();
 
+
                 }
+
+
+
             }
         });
 
@@ -462,14 +496,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         findViewById(R.id.fab_m3).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (send){
+                //Log.i("______valeur send du bouton annuler", send.toString());
+                if (send) {
                     //remove in the database the order
-                    JSONObject remove =new JSONObject();
+                    JSONObject remove = new JSONObject();
 
                     try {
-                        remove.put("ctrl","removeCourse");
+                        remove.put("ctrl", "removeCourse");
                         remove.put("user_id", user_id);
-                        remove.put("depart",depart.toString());
+                        remove.put("depart", depart.toString());
                         remove.put("arrivee", arrivee.toString());
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -487,9 +522,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                     String out1 = rep1.replaceAll(" ", "");
                     if (out1.equals("ok")) {
-                        Toast.makeText(getApplicationContext(),"order canceled",Toast.LENGTH_SHORT).show();
-                    }else{
-                        Toast.makeText(getApplicationContext(),"error cancel",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "order canceled", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "error cancel", Toast.LENGTH_SHORT).show();
                     }
 
 
@@ -502,7 +537,262 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
+
+        //fab call
+        findViewById(R.id.fab_call).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!number.isEmpty()) {
+                    Intent callIntent = new Intent(Intent.ACTION_CALL);
+                    callIntent.setData(Uri.parse("tel:" + number));
+                    startActivity(callIntent);
+                }
+            }
+        });
+
     }
+
+    //Every 10000 ms
+    private void doSomethingRepeatedly() {
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+
+                try {
+
+                    //new SendToServer().execute();
+
+                } catch (Exception e) {
+                    // TODO: handle exception
+                }
+
+            }
+        }, 0, 10000);
+    }
+
+    private class BackgroundTask extends AsyncTask <Void, Void, Void> {
+        private ProgressDialog dialog;
+        private int tm;
+
+        public BackgroundTask(MainActivity activity) {
+            dialog = new ProgressDialog(activity);
+            int tm=10000;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            dialog.setMessage(getString(R.string.msg_res_dr));
+            dialog.setButton("Cancel", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    // Use either finish() or return() to either close the activity or just the dialog
+                    finish();
+                    startActivity(new Intent(MainActivity.this, MainActivity.class));
+
+                    return;
+                }
+            });
+            dialog.show();
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            String testi = null;
+            //HTTPRequest checkDriv = new HTTPRequest(req);
+            /*try {
+               String resu = checkDriv.execute().get();
+               testi = resu.replaceAll(" ", "");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }*/
+
+            while(tm<50000 || !(testi.equals("ok"))){
+
+                try {
+                    String resu = (new HTTPRequest(req)).execute().get();
+                    testi = resu.replaceAll(" ", "");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+                for(int i=0;i<10000;i++){
+                    tm=tm+i;
+                }
+            }
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+            }
+            if (testi.equals("ok")){
+                Log.i("------research driver", "************Driver finded");
+                //Toast.makeText(getApplicationContext(),"Driver finded", Toast.LENGTH_LONG);
+
+                JSONObject j=new JSONObject();
+                try {
+                    j.put("ctrl","donneesDriver");
+                    j.put("user_id",user_id);
+                    j.put("depart", depart.toString());
+                    j.put("arrivee",arrivee.toString());
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Log.i("------donnees requetes",j.toString());
+                try {
+                    String rep = (new HTTPRequest(j.toString())).execute().get();
+                    Log.i("------donnees driver",rep);
+                    myDriver= new JSONObject(rep);
+                    number = myDriver.getString("numero");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                findViewById(R.id.fab_call).setVisibility(View.VISIBLE);
+                findViewById(R.id.fab_m3).setVisibility(View.GONE);
+
+            } else {
+                Log.i("------research driver", "******************No driver");
+                //Toast.makeText(getApplicationContext(),"No driver",Toast.LENGTH_LONG);
+            }
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                Thread.sleep(30000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+    }
+    /*
+    public class Research extends AsyncTask<Void, Void, String> {
+        // private ProgressDialog dialog;
+        private ProgressDialog dialog = new ProgressDialog(getApplicationContext());
+
+        @Override
+        protected void onPreExecute() {
+            // This progressbar will load util tast in doInBackground method loads
+            dialog = new ProgressDialog(MainActivity.this);
+            dialog.setMessage("Loading...");
+            dialog.setCancelable(true);
+            dialog.setTitle("In progress...");
+            dialog.setIcon(android.R.drawable.stat_sys_download);
+            dialog.setMax(100);
+            dialog.show();
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            //perform any action
+
+            final JSONObject jObj=new JSONObject();
+            try {
+                jObj.put("ctrl","checkDriver");
+                jObj.put("user_id",user_id);
+                jObj.put("depart",depart.toString());
+                jObj.put("arrivee",arrivee.toString());
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return jObj.toString();
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            long delai=40000;
+            Log.i("********* async task research", result);
+
+            long Max = System.currentTimeMillis() + delai;
+            while (System.currentTimeMillis()< Max && test.equals("erreur"))
+            {
+
+                HTTPRequest checkDriv = new HTTPRequest(result);
+                try {
+                    res = checkDriv.execute().get();
+                    test = res.replaceAll(" ", "");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            dialog.dismiss();
+        }
+    }
+
+    class LoadBackgroudData extends AsyncTask<String, String, String> {
+
+        ProgressDialog pd;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            pd = new ProgressDialog(getBaseContext());
+            pd.setTitle("Loading...");
+            pd.setMessage("Please wait.");
+            pd.setCancelable(false);
+
+            pd.show();
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            // execute your time taking process here
+            final JSONObject jObj=new JSONObject();
+            try {
+                jObj.put("ctrl","checkDriver");
+                jObj.put("user_id",user_id);
+                jObj.put("depart",depart.toString());
+                jObj.put("arrivee",arrivee.toString());
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            HTTPRequest checkDriv = new HTTPRequest(jObj.toString());
+            try {
+                res = checkDriv.execute().get();
+                test = res.replaceAll(" ", "");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            if (pd != null) {
+                if (pd.isShowing()) {
+                    pd.dismiss();
+                }
+            }
+
+        }
+
+
+
+
+    }*/
 
 
 

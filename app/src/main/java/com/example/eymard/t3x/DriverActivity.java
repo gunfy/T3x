@@ -6,30 +6,23 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Handler;
-import android.os.Message;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,14 +52,16 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.concurrent.ExecutionException;
 
-public class DriverActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener,GoogleMap.OnInfoWindowClickListener, LocationListener {
+import Services.DirectionsJSONParser;
+import Interfaces.ShakeListener;
+import Services.ShakeEventManager;
+import Tasks.HTTPRequest;
+
+public class DriverActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener,GoogleMap.OnInfoWindowClickListener, LocationListener,ShakeEventManager.ShakeListener {
 
     final int RQS_GooglePlayServices = 1;
     GoogleMap myMap;
@@ -84,7 +79,7 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
     LatLng arrivee;
     private HashMap<Marker, JSONObject> mHashMap = new HashMap<Marker, JSONObject>();
     String number;
-    ShakeListener mShaker;
+    ShakeEventManager mShaker;
 
 
 
@@ -195,6 +190,12 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
         //myMap.setOnMapLongClickListener(this);
         myMap.setOnInfoWindowClickListener(this);
 
+        //------------gestion du shake
+        mShaker = new ShakeEventManager();
+        mShaker.setListener(this);
+        mShaker.init(this);
+
+        /*
         mShaker = new ShakeListener(this);
         mShaker.setOnShakeListener(new ShakeListener.OnShakeListener() {
             public void onShake() {
@@ -207,7 +208,7 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
 
 
             }
-        });
+        });*/
 
 
     }
@@ -296,6 +297,7 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
     protected void onResume() {
         // TODO Auto-generated method stub
         super.onResume();
+        mShaker.register();
 
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
 
@@ -389,7 +391,7 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
         findViewById(R.id.fab_ok_dr).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!notBusy){
+                if (!notBusy) {
 
                     Snackbar snackbar = Snackbar
                             .make(findViewById(R.id.coordinatorLayoutDr), getString(R.string.msg_dr_custom), Snackbar.LENGTH_LONG)
@@ -411,7 +413,7 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
                                     // Start downloading json data from Google Directions API
                                     downloadTask.execute(url);
 
-                                    notBusy=true;
+                                    notBusy = true;
                                 }
                             });
                     snackbar.show();
@@ -430,6 +432,17 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
         return ret;
 
 
+    }
+
+    @Override
+    public void onShake() {
+
+        Log.i("valeur de not busy----",notBusy.toString());
+        /*if(notBusy) {
+            Toast.makeText(DriverActivity.this, getString(R.string.msg_dr_maj), Toast.LENGTH_SHORT).show();
+            finish();
+            startActivity(new Intent(DriverActivity.this, DriverActivity.class));
+        }*/
     }
 
 
@@ -522,6 +535,13 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
 
         // Save the user's current state
 
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mShaker.deregister();
     }
 
 
@@ -700,8 +720,6 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
             myMap.addPolyline(lineOptions);
         }
     }
-
-
 
 
 

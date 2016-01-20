@@ -1,4 +1,4 @@
-package com.example.eymard.t3x;
+package Tasks;
 
 import android.content.ContentValues;
 import android.os.AsyncTask;
@@ -15,6 +15,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
+
+import Interfaces.AsyncResponse;
 
 /**
  * Created by eymard on 08/12/2015.

@@ -1,4 +1,4 @@
-package com.example.eymard.t3x;
+package Tasks;
 
 import android.content.ContentValues;
 import android.os.AsyncTask;

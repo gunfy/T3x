@@ -3,7 +3,6 @@ package com.example.eymard.t3x;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -12,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -20,11 +18,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.concurrent.ExecutionException;
+
+import Interfaces.AsyncResponse;
+import Tasks.HttpQuery;
 
 public class ProfilActivity extends AppCompatActivity implements AsyncResponse {
 
@@ -151,7 +151,7 @@ public class ProfilActivity extends AppCompatActivity implements AsyncResponse {
                 mDrawerLayout.closeDrawers();
                 switch (menuItem.getTitle().toString()){
                     case "Home":
-                        //finish();
+                        finish();
                         startActivity(new Intent(ProfilActivity.this,MainActivity.class));
                         break;
                     case "Profile":
@@ -164,6 +164,9 @@ public class ProfilActivity extends AppCompatActivity implements AsyncResponse {
                         Intent intent = new Intent(ProfilActivity.this, LoginActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
+                        break;
+                    case "Driver mode":
+                        startActivity(new Intent(ProfilActivity.this, DriverActivity.class));
                         break;
 
                     default:

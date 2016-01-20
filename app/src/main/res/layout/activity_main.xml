@@ -37,6 +37,7 @@
             android:background="@drawable/bt_locinfo"
             android:gravity="center"/>
 
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -73,6 +74,26 @@
                 android:layout_gravity="right|bottom"
                 app:fab_icon="@drawable/ic_annuler"
                 android:visibility="gone"
+                />
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_call"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:visibility="gone"
+                android:layout_gravity="center|bottom"
+                app:fab_icon="@drawable/ic_tel"
+                />
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_ok"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:visibility="gone"
+                android:layout_gravity="right|center"
+                app:fab_icon="@drawable/ic_done"
                 />
         </FrameLayout>
 

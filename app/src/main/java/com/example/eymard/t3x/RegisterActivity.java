@@ -5,10 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,7 +13,10 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class RegisterActivity extends AppCompatActivity implements View.OnClickListener, AsyncResponse{
+import Interfaces.AsyncResponse;
+import Tasks.HttpQuery;
+
+public class RegisterActivity extends AppCompatActivity implements View.OnClickListener, AsyncResponse {
 
     private Button bt_register,bt_cancel;
     private EditText et_firstname, et_lastname, et_username, et_email, et_password,et_number;

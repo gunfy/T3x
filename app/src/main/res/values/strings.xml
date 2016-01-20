@@ -53,7 +53,9 @@
     <string name="snack_dr_msg1"> Yes </string>
     <string name="snack_order_send"> Order send</string>
     <string name="msg_dr_custom"> Is the customer in the car ?</string>
-    <string name="msg_dr_maj">Updating ...</string>
+    <string name="msg_dr_maj">Refresh data...</string>
+    <string name="msg_res_dr"> Research of driver ... Wait!!</string>
+    <string name="msg_res_can"> Cancel</string>
 
 
 

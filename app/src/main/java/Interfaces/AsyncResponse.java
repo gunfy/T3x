@@ -1,4 +1,4 @@
-package com.example.eymard.t3x;
+package Interfaces;
 
 /**
  * Created by eymard on 08/12/2015.

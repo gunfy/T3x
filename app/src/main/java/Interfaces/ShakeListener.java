@@ -1,9 +1,8 @@
-package com.example.eymard.t3x;
+package Interfaces;
 
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
-import android.hardware.SensorListener;
 import android.hardware.SensorManager;
 import android.util.Log;
 import android.widget.Toast;

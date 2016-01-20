@@ -1,4 +1,4 @@
-package com.example.eymard.t3x;
+package Tasks;
 
 import android.content.Context;
 import android.location.Address;
@@ -17,7 +17,7 @@ import java.util.Locale;
 public class AddressLocation extends AsyncTask<String, String, String> {
 
 
-    private static final String TAG = "com.example.eymard.t3x.AddressLocation";
+    private static final String TAG = "Tasks.AddressLocation";
     private Context mainContxt;
     private Double latitude,longitude;
 
