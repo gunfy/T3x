@@ -1,0 +1,68 @@
+<resources>
+
+    <string name="app_name">T3x</string>
+
+    <!-- Strings related to login or register -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Mot de passe </string>
+    <string name="prompt_firstname">Prénom</string>
+    <string name="prompt_lastname">Nom</string>
+    <string name="prompt_username">Identifiant</string>
+    <string name="prompt_number">Numéro de tel</string>
+    <string name="action_sign_in">Créer un compte</string>
+    <string name="action_login">Connexion </string>
+    <string name="action_cancel">ANNULER</string>
+    <string name="tv_register">Créer un compte</string>
+    <string name="error_invalid_email">Cet email est invalide</string>
+    <string name="error_invalid_password">Ce mot de passe est trop court</string>
+    <string name="error_incorrect_password">Ce mot de passe est incorrect</string>
+    <string name="error_field_required">Ce champ est requis</string>
+
+    <string name="action_settings">Paramètres</string>
+    <string name="title_activity_register">RegisterActivity</string>
+
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_menu">Menu</string>
+
+
+    <string name="drawer_header_text">Drawer Header</string>
+    <string name="nav_item_home">Home</string>
+    <string name="nav_item_profil">Profile</string>
+    <string name="nav_item_historic">Historicals</string>
+    <string name="nav_sub_menu_about">About</string>
+    <string name="nav_item_logout">Logout</string>
+    <string name="nav_item_mode">Driver mode</string>
+    <string name="nav_sub_menu">Informations</string>
+
+
+
+    <string name="action_example">Example action</string>
+    <string name="title_activity_profil">ProfilActivity</string>
+
+    <string name="tv_firstname">Prénom :  </string>
+    <string name="tv_lastname">Nom :  </string>
+    <string name="tv_username">Identifiant :  </string>
+    <string name="tv_email">Email :  </string>
+    <string name="tv_id">ID :  </string>
+    <string name="tv_number">Numéro Tel :  </string>
+    <string name="bt_edit">Valider</string>
+
+    <string name="snack_msg_arrivee">Indiquer le point d\'arrivée</string>
+    <string name="snack_msg">Commander ?</string>
+    <string name="snack_bt"> Accepter</string>
+    <string name="snack_dr_msg"> Accepter ?</string>
+    <string name="snack_dr_msg1"> Oui </string>
+    <string name="snack_order_send"> Commande envoyé</string>
+    <string name="msg_dr_custom"> Le client est dans la voiture ?</string>
+    <string name="msg_dr_maj">Mise à jour des données...</string>
+    <string name="msg_res_dr"> Recherche d\'un chauffeur ... Patientez!!</string>
+    <string name="msg_res_can"> Annuler</string>
+    <string name="msg_dr_find"> Chauffeur trouvé :) !</string>
+    <string name="msg_dr_nofind"> Aucun chauffeur disponible :(! Ressayer dans quelques minutes</string>
+    <string name="toast_ordc">Commande annulée</string>
+
+
+
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_driver">DriverActivity</string>
+</resources>

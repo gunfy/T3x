@@ -146,6 +146,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         if(out.equals("ok")){
 
             Toast.makeText(getApplicationContext(), "Connecter vous à présent",Toast.LENGTH_LONG).show();
+            finish();
             startActivity(new Intent(this, LoginActivity.class));
 
         }else if (out.equals("erreur")){

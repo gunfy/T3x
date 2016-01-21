@@ -9,8 +9,8 @@
     <string name="prompt_username">Username</string>
     <string name="prompt_number">Phone number</string>
     <string name="action_sign_in">SIGN IN</string>
-    <string name="action_login">LOGIN</string>
-    <string name="action_cancel">CANCEL</string>
+    <string name="action_login">SE CONNECTER</string>
+    <string name="action_cancel">ANNULER</string>
     <string name="tv_register">Register here</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
@@ -56,10 +56,15 @@
     <string name="msg_dr_maj">Refresh data...</string>
     <string name="msg_res_dr"> Research of driver ... Wait!!</string>
     <string name="msg_res_can"> Cancel</string>
+    <string name="msg_dr_find"> Driver found!</string>
+    <string name="msg_dr_nofind"> No driver found! Retry</string>
+
+    <string name="toast_ordc">Order canceled</string>
 
 
 
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_driver">DriverActivity</string>
+    <string name="title_activity_histo">HistoActivity</string>
 
 </resources>

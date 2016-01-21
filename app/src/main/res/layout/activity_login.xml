@@ -21,7 +21,7 @@
 
                 android:id="@+id/tv_signin"
                 android:text="@string/action_login"
-                android:textSize="32dp"
+                android:textSize="28dp"
                 android:layout_gravity="center"
                 android:textStyle="bold"
                 android:layout_marginBottom="20dp"

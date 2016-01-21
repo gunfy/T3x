@@ -95,6 +95,16 @@
                 android:layout_gravity="right|center"
                 app:fab_icon="@drawable/ic_done"
                 />
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_refresh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:visibility="gone"
+                android:layout_gravity="left|bottom"
+                app:fab_icon="@drawable/ic_refresh"
+                />
         </FrameLayout>
 
 

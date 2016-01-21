@@ -80,6 +80,7 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
     private HashMap<Marker, JSONObject> mHashMap = new HashMap<Marker, JSONObject>();
     String number;
     ShakeEventManager mShaker;
+    int id_course=0;
 
 
 
@@ -126,7 +127,7 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
                 mDrawerLayout.closeDrawers();
                 switch (menuItem.getTitle().toString()) {
                     case "Home":
-                        finish();
+                        //finish();
                         startActivity(new Intent(DriverActivity.this,MainActivity.class));
                         break;
 
@@ -144,7 +145,12 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
                         break;
 
                     case "Driver mode":
+                        finish();
                         startActivity(new Intent(DriverActivity.this, DriverActivity.class));
+                        break;
+                    case "Historicals":
+                        //finish();
+                        startActivity(new Intent(DriverActivity.this, HistoActivity.class));
                         break;
 
                     default:
@@ -195,20 +201,6 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
         mShaker.setListener(this);
         mShaker.init(this);
 
-        /*
-        mShaker = new ShakeListener(this);
-        mShaker.setOnShakeListener(new ShakeListener.OnShakeListener() {
-            public void onShake() {
-
-                if(notBusy) {
-                    Toast.makeText(DriverActivity.this, getString(R.string.msg_dr_maj), Toast.LENGTH_SHORT).show();
-                    finish();
-                    startActivity(new Intent(DriverActivity.this,DriverActivity.class));
-                }
-
-
-            }
-        });*/
 
 
     }
@@ -438,11 +430,11 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
     public void onShake() {
 
         Log.i("valeur de not busy----",notBusy.toString());
-        /*if(notBusy) {
+        if(notBusy) {
             Toast.makeText(DriverActivity.this, getString(R.string.msg_dr_maj), Toast.LENGTH_SHORT).show();
             finish();
             startActivity(new Intent(DriverActivity.this, DriverActivity.class));
-        }*/
+        }
     }
 
 
@@ -461,7 +453,9 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
                             try {
                                 obj.put("ctrl", "acceptCourse");
                                 obj.put("id_course", json.getInt("id"));
+                                id_course=json.getInt("id");
                                 obj.put("id_user", user_id);
+                                obj.put("pos", (new LatLng(myLocation.getLatitude(),myLocation.getLongitude())).toString());
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -625,6 +619,20 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
     @Override
     public void onLocationChanged(Location location) {
         myLocation=location;
+        if(id_course !=0){
+            JSONObject o = new JSONObject();
+            try {
+                o.put("ctrl", "upPos");
+                o.put("id_course", id_course);
+                o.put("id_user", user_id);
+                o.put("pos", (new LatLng(location.getLatitude(),location.getLongitude())).toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            new HTTPRequest(o.toString()).execute();
+            Log.i("onLocationChanged","*****Update de ma position******");
+        }
+
 
     }
 

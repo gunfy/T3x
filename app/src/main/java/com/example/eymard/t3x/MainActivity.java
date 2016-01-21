@@ -16,6 +16,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -47,14 +48,16 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutionException;
 
+import Services.ShakeEventManager;
 import Tasks.AddressLocation;
 import Tasks.HTTPRequest;
 
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerDragListener, GoogleMap.OnMarkerClickListener {
+
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerDragListener, GoogleMap.OnMarkerClickListener, ShakeEventManager.ShakeListener {
 
     final int RQS_GooglePlayServices = 1;
     GoogleMap myMap;
-    Marker myMarker,myMarker2;
+    Marker myMarker,myMarker2,driver;
     Button btLocInfo;
     String title = null;
     DrawerLayout mDrawerLayout;
@@ -65,13 +68,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     JSONObject myCourse=new JSONObject();
     Boolean ordre=false;
     Boolean send=false;
+    Boolean driv=false;
     //String depart,arrivee;
     LatLng depart,arrivee;
-    ProgressDialog myProg;
     String test="erreur";
     String res; String req;
     JSONObject myDriver=new JSONObject();
     String number;
+    private ShakeEventManager sd;
 
 
 
@@ -135,8 +139,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         break;
 
                     case "Driver mode":
+                        //finish();
                         startActivity(new Intent(MainActivity.this, DriverActivity.class));
                         break;
+
+                    case "Historicals":
+                        startActivity(new Intent(MainActivity.this, HistoActivity.class));
+                        break;
+
 
                     default:
                         Toast.makeText(MainActivity.this, menuItem.getTitle(), Toast.LENGTH_LONG).show();
@@ -182,7 +192,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         //myMap.setOnMapClickListener(this);
         //myMap.setOnMapLongClickListener(this);
         myMap.setOnMarkerDragListener(this);
-
+        sd = new ShakeEventManager();
+        sd.setListener(this);
+        sd.init(this);
 
 
     }
@@ -300,14 +312,18 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
-
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sd.deregister();
+    }
 
 
     @Override
     protected void onResume() {
         // TODO Auto-generated method stub
         super.onResume();
-
+        sd.register();
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
 
         if (resultCode == ConnectionResult.SUCCESS){
@@ -345,6 +361,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     {
         //affichage de ma localisation
         map.setMyLocationEnabled(true);
+
 
     }
 
@@ -522,7 +539,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                     String out1 = rep1.replaceAll(" ", "");
                     if (out1.equals("ok")) {
-                        Toast.makeText(getApplicationContext(), "order canceled", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), getString(R.string.toast_ordc), Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(getApplicationContext(), "error cancel", Toast.LENGTH_SHORT).show();
                     }
@@ -550,6 +567,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
+        //fab refresh
+        findViewById(R.id.fab_refresh).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BackgroundTask task = new BackgroundTask(MainActivity.this);
+                task.execute();
+            }
+        });
+
     }
 
     //Every 10000 ms
@@ -570,63 +596,81 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }, 0, 10000);
     }
 
+    @Override
+    public void onShake() {
+        if(driv) {
+            Log.i("****onShakeMain", "*******Recuperation de la derniere position du driver");
+            JSONObject o = new JSONObject();
+            try {
+                o.put("ctrl", "getPos");
+                o.put("id_user", user_id);
+                o.put("depart", depart.toString());
+                o.put("arrivee", arrivee.toString());
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            String p = "";
+            Log.i("------onShake req",o.toString());
+            try {
+
+                String r = new HTTPRequest(o.toString()).execute().get();
+                Log.i("------onShake getPos",r);
+                o = new JSONObject(r);
+                p = o.getString("pos");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            String[] tab;
+            tab = mySplit(p);
+            LatLng posi = new LatLng(Double.parseDouble(tab[0]), Double.parseDouble(tab[1]));
+            driver.setPosition(posi);
+            myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(posi, 14));
+        }
+
+
+
+    }
+
     private class BackgroundTask extends AsyncTask <Void, Void, Void> {
         private ProgressDialog dialog;
         private int tm;
+        private boolean b;
 
         public BackgroundTask(MainActivity activity) {
             dialog = new ProgressDialog(activity);
-            int tm=10000;
+            tm=0;
+            b=false;
         }
 
         @Override
         protected void onPreExecute() {
             dialog.setMessage(getString(R.string.msg_res_dr));
-            dialog.setButton("Cancel", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    // Use either finish() or return() to either close the activity or just the dialog
-                    finish();
-                    startActivity(new Intent(MainActivity.this, MainActivity.class));
-
-                    return;
-                }
-            });
             dialog.show();
         }
 
         @Override
         protected void onPostExecute(Void result) {
             String testi = null;
-            //HTTPRequest checkDriv = new HTTPRequest(req);
-            /*try {
-               String resu = checkDriv.execute().get();
-               testi = resu.replaceAll(" ", "");
+            try {
+                String resu = (new HTTPRequest(req)).execute().get();
+                testi = resu.replaceAll(" ", "");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
                 e.printStackTrace();
-            }*/
-
-            while(tm<50000 || !(testi.equals("ok"))){
-
-                try {
-                    String resu = (new HTTPRequest(req)).execute().get();
-                    testi = resu.replaceAll(" ", "");
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                }
-                for(int i=0;i<10000;i++){
-                    tm=tm+i;
-                }
             }
+
             if (dialog.isShowing()) {
                 dialog.dismiss();
             }
             if (testi.equals("ok")){
                 Log.i("------research driver", "************Driver finded");
-                //Toast.makeText(getApplicationContext(),"Driver finded", Toast.LENGTH_LONG);
+                Toast.makeText(getApplicationContext(),getString(R.string.msg_dr_find), Toast.LENGTH_LONG).show();
 
                 JSONObject j=new JSONObject();
                 try {
@@ -653,10 +697,30 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
                 findViewById(R.id.fab_call).setVisibility(View.VISIBLE);
                 findViewById(R.id.fab_m3).setVisibility(View.GONE);
+                findViewById(R.id.fab_refresh).setVisibility(View.GONE);
+                String [] tab= new String[0];
+                String drName="";
+                try {
+                    tab = mySplit(myDriver.getString("pos"));
+                    drName=myDriver.getString("username");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                LatLng def= new LatLng(Double.parseDouble(tab[0]),Double.parseDouble(tab[1]));
+               driver= myMap.addMarker(new MarkerOptions()
+                                .position(def)
+                                .draggable(false)
+                                .title("Driver: " + drName)
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
+                );
 
+                myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(def,14));
+
+                driv=true;
             } else {
                 Log.i("------research driver", "******************No driver");
-                //Toast.makeText(getApplicationContext(),"No driver",Toast.LENGTH_LONG);
+                Toast.makeText(getApplicationContext(),getString(R.string.msg_dr_nofind),Toast.LENGTH_LONG).show();
+                findViewById(R.id.fab_refresh).setVisibility(View.VISIBLE);
             }
 
         }
@@ -664,7 +728,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                Thread.sleep(30000);
+                Thread.sleep(10000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -673,127 +737,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
     }
-    /*
-    public class Research extends AsyncTask<Void, Void, String> {
-        // private ProgressDialog dialog;
-        private ProgressDialog dialog = new ProgressDialog(getApplicationContext());
 
-        @Override
-        protected void onPreExecute() {
-            // This progressbar will load util tast in doInBackground method loads
-            dialog = new ProgressDialog(MainActivity.this);
-            dialog.setMessage("Loading...");
-            dialog.setCancelable(true);
-            dialog.setTitle("In progress...");
-            dialog.setIcon(android.R.drawable.stat_sys_download);
-            dialog.setMax(100);
-            dialog.show();
-        }
+    public String [] mySplit(String s){
+        String[] parts = s.split(" ");
+        String part= parts[1];
+        part = part.substring(1,part.length()-1);
+        String[] ret= part.split(",");
+        return ret;
 
-        @Override
-        protected String doInBackground(Void... params) {
-            //perform any action
 
-            final JSONObject jObj=new JSONObject();
-            try {
-                jObj.put("ctrl","checkDriver");
-                jObj.put("user_id",user_id);
-                jObj.put("depart",depart.toString());
-                jObj.put("arrivee",arrivee.toString());
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            return jObj.toString();
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            long delai=40000;
-            Log.i("********* async task research", result);
-
-            long Max = System.currentTimeMillis() + delai;
-            while (System.currentTimeMillis()< Max && test.equals("erreur"))
-            {
-
-                HTTPRequest checkDriv = new HTTPRequest(result);
-                try {
-                    res = checkDriv.execute().get();
-                    test = res.replaceAll(" ", "");
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                }
-
-            }
-            dialog.dismiss();
-        }
     }
-
-    class LoadBackgroudData extends AsyncTask<String, String, String> {
-
-        ProgressDialog pd;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            pd = new ProgressDialog(getBaseContext());
-            pd.setTitle("Loading...");
-            pd.setMessage("Please wait.");
-            pd.setCancelable(false);
-
-            pd.show();
-
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            // execute your time taking process here
-            final JSONObject jObj=new JSONObject();
-            try {
-                jObj.put("ctrl","checkDriver");
-                jObj.put("user_id",user_id);
-                jObj.put("depart",depart.toString());
-                jObj.put("arrivee",arrivee.toString());
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            HTTPRequest checkDriv = new HTTPRequest(jObj.toString());
-            try {
-                res = checkDriv.execute().get();
-                test = res.replaceAll(" ", "");
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
-
-            return null;
-
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-
-            if (pd != null) {
-                if (pd.isShowing()) {
-                    pd.dismiss();
-                }
-            }
-
-        }
-
-
-
-
-    }*/
-
 
 
 }

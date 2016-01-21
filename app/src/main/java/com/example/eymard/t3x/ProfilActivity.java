@@ -155,7 +155,7 @@ public class ProfilActivity extends AppCompatActivity implements AsyncResponse {
                         startActivity(new Intent(ProfilActivity.this,MainActivity.class));
                         break;
                     case "Profile":
-                        //finish();
+                        finish();
                         startActivity(new Intent(ProfilActivity.this,ProfilActivity.class));
                         break;
                     case "Logout":
@@ -167,6 +167,10 @@ public class ProfilActivity extends AppCompatActivity implements AsyncResponse {
                         break;
                     case "Driver mode":
                         startActivity(new Intent(ProfilActivity.this, DriverActivity.class));
+                        break;
+                    case "Historicals":
+                        //finish();
+                        startActivity(new Intent(ProfilActivity.this, HistoActivity.class));
                         break;
 
                     default:

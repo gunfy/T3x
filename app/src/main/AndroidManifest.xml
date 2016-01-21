@@ -58,6 +58,10 @@
             android:name=".DriverActivity"
             android:label="@string/title_activity_driver" >
         </activity>
+        <activity
+            android:name=".HistoActivity"
+            android:label="@string/title_activity_histo" >
+        </activity>
     </application>
 
 </manifest>
